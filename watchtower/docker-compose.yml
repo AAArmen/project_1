@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Required to interact with Docker
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=90  # for default  Poll every 300 seconds (5 minutes)
+      - WATCHTOWER_CLEANUP=true       # Remove old images after updating
+      - WATCHTOWER_DEBUG=true         # Enable debug logging (optional)
+      - WATCHTOWER_NOTIFICATIONS=email # Enable notifications (optional)
+      - WATCHTOWER_NOTIFICATION_EMAIL_FROM=your-email@example.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_TO=recipient-email@example.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=smtp.example.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=587
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=your-email@example.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=your-email-password
+    networks:
+      - con_net
+
+networks:
+  con_net:
+    external: true

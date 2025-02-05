@@ -1,0 +1,35 @@
+
+version: "3.8"
+
+services:
+
+#  networks:
+#    con_net:
+#      external: true
+
+  nexus:
+    image: sonatype/nexus3:latest
+    container_name: nexus
+    restart: always
+    ports:
+      - "8081:8081"  # Nexus Web UI
+      - "8082:8082"  # Repository API
+      - "8083:8083"  # Docker registry
+    volumes:
+      - nexus-data:/nexus-data
+    environment:
+      - INSTALL4J_ADD_VM_PARAMS=-Xms2g -Xmx2g -XX:MaxDirectMemorySize=2g -Djava.util.prefs.userRoot=/nexus-data/javaprefs
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    networks:
+      - con_net
+
+volumes:
+  nexus-data:
+    driver: local
+
+networks:
+  con_net:
+    external: true
